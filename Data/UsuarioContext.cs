@@ -11,5 +11,5 @@ namespace Listatarefa.Data
 
             public UsuarioContext(DbContextOptions<UsuarioContext> options) : base(options) { }
 
-        }
+    }
     }

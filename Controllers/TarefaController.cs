@@ -43,15 +43,7 @@ namespace Listatarefa.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public IActionResult ConsultarPessoaId(int id)
-        {
-            var tarefaDoBanco = _context.Tarefas.Where(t => t.Id.Equals(id)).ToList();
-            if (!tarefaDoBanco.Any())
-                return NotFound("Não encontrado");
-            return Ok(tarefaDoBanco);
-        }
-        [HttpPost("Cadastrar")]
+           [HttpPost("Cadastrar")]
         public IActionResult CriarTarefas(Tarefas tarefa)
         {
             var idUsuario = HttpContext.Session.GetString("IdLogado");
@@ -69,23 +61,30 @@ namespace Listatarefa.Controllers
             _context.SaveChanges();
             return Created("Teste", tarefa);
         }
-        [HttpGet("tarefaUsuario/{ident}")]
-        public IActionResult TarefaUsuario(int ident)
+        [HttpGet("tarefaUsuario")]
+        public IActionResult TarefaUsuario()
+
         {
+            var idUsuario = HttpContext.Session.GetString("IdLogado");
+            if (idUsuario == null) return Unauthorized("Faça login antes! ");
+
+            var sessao = Request.Cookies["IdLogado"];
+
             var resultado = from u in _context.Usuarios
                             join t in _context.Tarefas
-                            on u.Id equals t.idUsuario
-                            where ident == u.Id
+                            on u.Id equals t.idUsuarios
+                            where u.Id == int.Parse(idUsuario)
                             select new
                             {
                                 Usuario = u.Nome,
                                 u.Email,
-                                Tarefas = t.Status,
+                                Tarefas = t.Id,t.Status,
                                 t.Descricao
 
                             };
             return Ok(resultado.ToList());
         }
-
     }
+
+    
 }

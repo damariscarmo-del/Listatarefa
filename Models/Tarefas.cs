@@ -2,7 +2,7 @@
 {
     public class Tarefas
     {
-        internal object idUsuario;
+      
 
         public int Id { get; set; }
         public string Descricao { get; set; }

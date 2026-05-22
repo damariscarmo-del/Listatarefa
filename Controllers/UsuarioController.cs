@@ -27,7 +27,14 @@ namespace Listatarefa.Controllers
                     return NotFound("Login ou Senha incorretas");
                 }
             HttpContext.Session.SetString("IdLogado", UsuariosDoBanco[0].Id.ToString());
-            Response.Cookies.Append("IdLogado", UsuariosDoBanco[0].Id.ToString());
+            Response.Cookies.Append("IdLogado", UsuariosDoBanco[0].Id.ToString(),
+                new CookieOptions
+                {
+                    Expires = DateTime.Now.AddMinutes(30),
+                    Secure = true,
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.None,
+                });
             return Ok("Login realizado com sucesso");
             }
                
